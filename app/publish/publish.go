@@ -106,6 +106,8 @@ func (h UploadHandler) Handle(w http.ResponseWriter, r *users.AuthenticatedReque
 		return
 	}
 
+	r.Body = http.MaxBytesReader(w, r.Body, config.GetMaxUploadSizeMB()*1024*1024)
+
 	f, err := h.saveFile(r)
 	if err != nil {
 		logger.Log().Error(err)
@@ -150,6 +152,7 @@ func (h UploadHandler) preparePath(walletID string) (string, error) {
 
 func (h UploadHandler) saveFile(r *users.AuthenticatedRequest) (*os.File, error) {
 	log := logger.LogF(monitor.F{"account_id": r.WalletID})
+
 	file, header, err := r.FormFile(FileFieldName)
 	if err != nil {
 		return nil, err

@@ -59,6 +59,7 @@ func (c *ConfigWrapper) Init() {
 	c.Viper.SetDefault("Address", ":8080")
 	c.Viper.SetDefault("Host", "http://localhost:8080")
 	c.Viper.SetDefault("BaseContentURL", "http://localhost:8080/content/")
+	c.Viper.SetDefault("MaxUploadSizeMB", int64(512))
 
 	c.Viper.SetDefault("AccountsEnabled", false)
 	c.Viper.BindEnv("AccountsEnabled")
@@ -180,4 +181,9 @@ func GetBlobFilesDir() string {
 // GetReflectorAddress returns reflector address in the format of host:port.
 func GetReflectorAddress() string {
 	return Config.Viper.GetString("ReflectorAddress")
+}
+
+// GetMaxUploadSizeMB returns max upload size for publishing files in megabytes
+func GetMaxUploadSizeMB() int64 {
+	return Config.Viper.GetInt64("MaxUploadSizeMB")
 }
